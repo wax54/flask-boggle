@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}Base Template{% endblock %}</title>
+</head>
+
+<body>
+    <!-- The Nav Bar -->
+    <!-- <nav class="navbar">
+        <a href="/">Choose a Story</a>
+    </nav> -->
+
+
+
+    <!-- The main content -->
+    <main id="main">
+        {% block content %}
+        GENERAL CONTENT
+        {% endblock %}
+    </main>
+<!-- The flashed Content  -->
+<section id="flashed_messages">
+    {% for msg in get_flashed_messages() %}
+    <p>{{msg}}</p>
+    {% endfor %}
+</section>
+</body>
+
+</html>
