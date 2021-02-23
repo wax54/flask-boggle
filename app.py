@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template as render
 from boggle import Boggle
 
 
@@ -12,4 +12,5 @@ boggle_game = Boggle()
 def main_boggle_page():
     board = boggle_game.make_board()
     session['board'] = board
-    return render_template('boggle-board.html', board)
+    print(board)
+    return render('boggle-board.html', board=board)

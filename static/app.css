@@ -1,0 +1,31 @@
+body{
+  margin: 0px;
+  min-height: 100vh;
+  text-align: center;
+  background-color: #f86cd7;
+  background-image: url('clouds.jpg');
+  /*Wonder Boy in Monster World(Genesis)(1991)*/
+  background-repeat: repeat-x;
+  background-size: 83vh 100vh;
+  color: #444;
+}
+
+
+.title{
+    text-align: center;
+}
+
+/* game board table */
+.boggle-board{
+  padding-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+}
+
+.boggle-cell{
+  width: 50px;
+  height: 50px;
+  border: solid 6px white;
+    font-size: xx-large;
+}

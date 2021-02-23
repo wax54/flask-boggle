@@ -1,3 +1,16 @@
 {%extends 'base.html'%}
-<h1>BOGGLE!</h1>
-{{board}}
+{% block title %}BOGGLE!{% endblock %}
+{% block content %}
+
+<h1 class="title">BOGGLE!</h1>
+<table class="boggle-board">
+    {% for row in board %}
+    <tr class="boggle-row">
+        {% for cell in row %}
+        <td class="boggle-cell">{{cell}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
