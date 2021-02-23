@@ -5,12 +5,17 @@
 <h1 class="title">BOGGLE!</h1>
 <table class="boggle-board">
     {% for row in board %}
-    <tr class="boggle-row">
+    <tr>
         {% for cell in row %}
-        <td class="boggle-cell">{{cell}}</td>
+        <td>{{cell}}</td>
         {% endfor %}
     </tr>
     {% endfor %}
 </table>
 
+<form action="/guess" method="POST" id="boggle-guess-input">
+    <label for="guess">Your guess</label>
+    <input type="text" id="guess" name="guess" placeholder="Ants">
+    <input type="submit">
+</form>
 {% endblock %}
