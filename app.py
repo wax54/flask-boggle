@@ -1,4 +1,4 @@
-from flask import Flask, session, request, render_template as render, jsonify
+from flask import Flask, session, request, render_template as render, jsonify, redirect
 from boggle import Boggle
 
 
@@ -11,24 +11,40 @@ boggle_game = Boggle()
 
 @app.route("/")
 def display_boggle_game():
-    """gets the boggle game and displays it for the user"""
-    board = get_board()
-    return render("boggle-board.html", board=board)
+    """gets the whole boggle page and returns it to the user"""
+    board = make_board()
+    session["used_words"] = []
+    play_count = session.get("play_count", 0)
+    high_score = session.get("high_score", 0)
+    return render("boggle-page.html", board=board, play_count=play_count, high_score=high_score)
 
 
 @app.route("/guess", methods=["POST"])
 def guess_word():
     """  """
     guess = request.json.get("guess")
+    guess = guess.strip()
+    if guess in session['used_words']:
+        return jsonify({"result": "used-word"})
     result = boggle_game.check_valid_word(get_board(), guess)
+    if result == 'ok':
+        used_words = session['used_words']
+        used_words.append(guess)
+        session['used_words'] = used_words
     return jsonify({"result": result})
+
+
+@app.route("/reshuffle")
+def reset_board():
+    """ """
+    board = make_board()
+    return render("boggle-board.html", board=board)
 
 
 @app.route("/game-over", methods=["POST"])
 def game_over():
     session.pop("board", None)
     increment_play_count()
-
     score = int(request.json.get("score"))
     high_score = update_high_score(score)
     return jsonify({"high_score": high_score, "num_of_plays": session["play_count"]})
@@ -41,14 +57,14 @@ def update_high_score(score):
 
 
 def increment_play_count():
-    if session.get("play_count"):
-        print(session["play_count"])
-    session["play_count"] = 1
+    plays = session.get("play_count")
+    session["play_count"] = 1 if not plays else plays + 1
 
 
-def reset_board():
+def make_board():
     board = boggle_game.make_board()
     session["board"] = board
+    return board
 
 
 def get_board():

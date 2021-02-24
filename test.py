@@ -40,6 +40,21 @@ class FlaskTests(TestCase):
             
     def test_high_score(self):
         with app.test_client() as client:
+            
+            #when no previous high score, and 0 is inputed, 0 is the highest score
+            client.get('/')            
+            res = client.post('/game-over', json={'score':0})
+            self.assertEqual(res.json["high_score"], 0)
+            
             client.get('/')
             res = client.post('/game-over', json={'score':4})
-            print(res.data)
+            self.assertEqual(res.json["high_score"], 4)
+            #if previous high score is higher, the old high score is returned
+            client.get('/')
+            res = client.post('/game-over', json={'score':3})
+            self.assertEqual(res.json["high_score"], 4)
+            
+            client.get('/')
+            res = client.post('/game-over', json={'score':10})
+            self.assertEqual(res.json["high_score"], 10)
+            

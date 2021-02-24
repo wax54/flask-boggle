@@ -1,0 +1,22 @@
+{%extends 'base.html'%}
+{% block title %}BOGGLE!{% endblock %}
+{% block content %}
+
+<h1 class="title">BOGGLE!</h1>
+
+<button id="reset">ReBoggle!</button>
+<h3 id="timer">You Have 60 Seconds Left</h3>
+<div id="game-board">
+    {% include 'boggle-board.html' %}
+</div>
+
+<form id="boggle-guess-input">
+    <label for="guess">Your guess</label>
+    <input type="text" id="guess" name="guess" placeholder="Ants">
+    <input type="submit">
+</form>
+<div id="stats">
+    {% include 'stats-component.html' %}
+</div>
+
+{% endblock %}

@@ -17,7 +17,7 @@ body{
 
 /* game board table */
 .boggle-board{
-  padding-top: 15px;
+  padding-top: 5px;
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 10px;

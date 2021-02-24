@@ -1,8 +1,3 @@
-{%extends 'base.html'%}
-{% block title %}BOGGLE!{% endblock %}
-{% block content %}
-
-<h1 class="title">BOGGLE!</h1>
 <table class="boggle-board">
     {% for row in board %}
     <tr>
@@ -12,12 +7,3 @@
     </tr>
     {% endfor %}
 </table>
-
-<form id="boggle-guess-input">
-    <label for="guess">Your guess</label>
-    <input type="text" id="guess" name="guess" placeholder="Ants">
-    <input type="submit">
-</form>
-    <h3 id="score-board"></h3>
-    <button id="reset">ReBoggle!</button>
-{% endblock %}
