@@ -1,6 +1,6 @@
 let score = 0;
 let gameOver = false;
-const GAME_LENGTH = 6000;
+const GAME_LENGTH = 10;
 let timeLeft;
 let gameTimer;
 startTimer();
@@ -47,17 +47,17 @@ function handleResults(result, word) {
     if (result == RESULT_OK) {
         //result was good
         addToScore(word.length);
-    } else if (result = RESULT_USED_WORD) {
+    } else if (result == RESULT_USED_WORD) {
         //word has already been used before
-        alert('I\'ve already given you points for that word!');
+        alertUser('I\'ve already given you points for that word!');
     }
     else if (result == RESULT_NOT_ON_BOARD) {
         //result was not on board
-        alert('Sorry, I don\'t See ' + word + ' on my board, try again ');
+        alertUser('Sorry, I don\'t See ' + word + ' on my board, try again ');
     }
-    else if (result = RESULT_NOT_A_WORD) {
+    else if (result == RESULT_NOT_A_WORD) {
         //result not a word
-        alert('I dont think thats a word...');
+        alertUser('I dont think thats a word...');
     }
 }
 
@@ -151,7 +151,15 @@ function updateHTMLCounter() {
         html = 'You Have ' + timeLeft + ' ';
         if (timeLeft === 1) html += ' Second Left';
         else html += 'Seconds Left';
+        if (timeLeft < 10) html += '!';
     } else html = 'Your Time Is Up!';
 
     $timer.html(html);
+}
+
+function alertUser(text) {
+    $infoBar = $('#user-info');
+    $infoBar.text(text);
+    $infoBar.show();
+    setTimeout(() => { $infoBar.hide() }, 1500)
 }

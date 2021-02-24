@@ -10,11 +10,12 @@
     {% include 'boggle-board.html' %}
 </div>
 
-<form id="boggle-guess-input">
+<form id="boggle-guess-input" autocomplete="off">
     <label for="guess">Your guess</label>
     <input type="text" id="guess" name="guess" placeholder="Ants">
     <input type="submit">
 </form>
+<div id="user-info"></div>
 <div id="stats">
     {% include 'stats-component.html' %}
 </div>

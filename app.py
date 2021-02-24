@@ -13,24 +13,23 @@ boggle_game = Boggle()
 def display_boggle_game():
     """gets the whole boggle page and returns it to the user"""
     board = make_board()
-    session["used_words"] = []
     play_count = session.get("play_count", 0)
     high_score = session.get("high_score", 0)
-    return render("boggle-page.html", board=board, play_count=play_count, high_score=high_score)
+    return render(
+        "boggle-page.html", board=board, play_count=play_count, high_score=high_score
+    )
 
 
 @app.route("/guess", methods=["POST"])
 def guess_word():
-    """  """
+    # """  """
     guess = request.json.get("guess")
     guess = guess.strip()
-    if guess in session['used_words']:
-        return jsonify({"result": "used-word"})
-    result = boggle_game.check_valid_word(get_board(), guess)
-    if result == 'ok':
-        used_words = session['used_words']
-        used_words.append(guess)
-        session['used_words'] = used_words
+    used_words = session["used_words"]
+    result = boggle_game.check_valid_word(get_board(), used_words, guess)
+    if result == "ok":
+        used_words.append(guess.upper())
+        session["used_words"] = used_words
     return jsonify({"result": result})
 
 
@@ -64,6 +63,8 @@ def increment_play_count():
 def make_board():
     board = boggle_game.make_board()
     session["board"] = board
+    # resets the used words since we have a new board
+    session["used_words"] = []
     return board
 
 

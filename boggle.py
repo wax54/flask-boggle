@@ -25,22 +25,28 @@ class Boggle():
         for y in range(5):
             row = [choice(string.ascii_uppercase) for i in range(5)]
             board.append(row)
-
         return board
 
-    def check_valid_word(self, board, word):
+    def check_valid_word(self, board, used_words, word):
         """Check if a word is a valid word in the dictionary and/or the boggle board"""
         word = word.upper()
+        
+        word_already_used = word in used_words
         word_exists =  word in self.words
         valid_word = self.find(board, word.upper())
-
-        if word_exists and valid_word:
+        
+        print(word in used_words)
+        if word_already_used:
+            result = 'used-word'
+            print('used_word', word)
+        elif word_exists and valid_word:
             result = "ok"
+            print(word, used_words)
         elif word_exists and not valid_word:
             result = "not-on-board"
         else:
             result = "not-a-word"
-
+        
         return result
 
     def find_from(self, board, word, y, x, seen):
