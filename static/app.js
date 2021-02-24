@@ -1,5 +1,6 @@
 let score = 0;
 let gameOver = false;
+setTimeout(timedOut, 60000);
 
 let $form = $('#boggle-guess-input');
 $form.on('submit', (e) => {
@@ -12,6 +13,10 @@ $form.on('submit', (e) => {
 })
 
 async function submitGuess(guess) {
+    if (gameOver) {
+        alert('Time Has Run Out, No More Guesses! But know that ' + score + ' points is nothing to Sneeze at!')
+        return;
+    }
     res = await axios({
         url: '/guess',
         method: 'POST',
@@ -31,7 +36,7 @@ function handleResults(result, word) {
         addToScore(word.length);
     } else if (result == RESULT_NOT_ON_BOARD) {
         //result was not on board
-        alert('Sorry, I don\'t See ' + guess + ' on my board, try again ');
+        alert('Sorry, I don\'t See ' + word + ' on my board, try again ');
     } else if (result = RESULT_NOT_A_WORD) {
         //result not a word
         alert('I dont think thats a word...');
@@ -44,5 +49,24 @@ function addToScore(points) {
 }
 function updateScoreBoard() {
     $scoreBoard = $('#score-board');
-    $scoreBoard.text(score);
+    text = 'You Have ' + score + ' ';
+    if (score === 1) text += 'Point';
+    else text += 'Points';
+
+    $scoreBoard.text(text);
+}
+
+async function setGameOver() {
+    gameOver = true;
+    res = await axios({
+        url: '/game-over',
+        method: 'POST',
+        data: { score }
+    });
+    console.log(res.data);
+}
+
+function timedOut() {
+    setGameOver();
+    alert('Times Up!');
 }

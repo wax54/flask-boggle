@@ -25,3 +25,21 @@ class FlaskTests(TestCase):
             #the board in the session should have 5 arrays inside
             self.assertEqual(len(session['board']), 5)
             
+            
+    def test_game_over(self):
+        with app.test_client() as client:
+            client.get('/')
+            self.assertIs(session.get("play_count"), None)
+            self.assertIs(session.get('high_score'), None)
+            # the game over post sent
+            res = client.post('/game-over', json={'score':4})
+            self.assertEqual(session.get("play_count"), 1)
+            self.assertEqual(session.get("high_score"), 4)
+            self.assertIs(session.get('board'), None)
+            
+            
+    def test_high_score(self):
+        with app.test_client() as client:
+            client.get('/')
+            res = client.post('/game-over', json={'score':4})
+            print(res.data)
