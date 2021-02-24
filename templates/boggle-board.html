@@ -13,9 +13,10 @@
     {% endfor %}
 </table>
 
-<form action="/guess" method="POST" id="boggle-guess-input">
+<form id="boggle-guess-input">
     <label for="guess">Your guess</label>
     <input type="text" id="guess" name="guess" placeholder="Ants">
     <input type="submit">
 </form>
+<h3>You Have <span id="score-board">0</span> Points</h3>
 {% endblock %}
