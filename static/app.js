@@ -1,4 +1,4 @@
-boggle = new Boggle();
+const boggle = new Boggle();
 
 let $form = $('#boggle-guess-input');
 $form.on('submit', (e) => {
@@ -20,4 +20,6 @@ $form.on('submit', (e) => {
 
 
 let $resetBtn = $('#reset');
-$resetBtn.on('click', boggle.resetGame);
+$resetBtn.on('click', () => {
+    boggle.resetGame();
+});

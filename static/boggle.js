@@ -1,4 +1,10 @@
 
+const $infoBar = $('#user-info');
+
+const $scoreBoard = $('#score-board');
+const $highScoreBoard = $('#high-score');
+const $playCount = $('#play-count');
+const $board = $('#game-board');
 
 class Boggle {
     constructor(gameLength = 60) {
@@ -7,6 +13,7 @@ class Boggle {
         this.GAME_LENGTH = gameLength;
         this.timeLeft;
         this.gameTimer;
+
         this.startTimer();
     }
 
@@ -51,7 +58,7 @@ class Boggle {
             method: 'POST',
             data: { guess }
         });
-        result = res.data.result;
+        const result = res.data.result;
         this.handleResults(result, guess);
     }
 
@@ -91,15 +98,17 @@ class Boggle {
             method: 'GET'
         });
 
-        const $board = $('#game-board');
-        $board.html(res.data);
-
+        updateBoard(res.data);
         this.gameOver = false;
         this.score = 0;
         updateScoreBoard(this.score);
         this.startTimer();
     }
 
+}
+
+function updateBoard(boardHTML) {
+    $board.html(boardHTML);
 }
 
 function updateHTMLCounter(timeLeft) {
@@ -115,7 +124,6 @@ function updateHTMLCounter(timeLeft) {
 }
 
 function updateScoreBoard(score) {
-    $scoreBoard = $('#score-board');
     text = score;
     // text = 'You Have ' + score + ' ';
     // if (score === 1) text += 'Point';
@@ -125,8 +133,6 @@ function updateScoreBoard(score) {
 }
 
 function updatePlayCount(playCount) {
-    console.log(playCount);
-    $playCount = $('#play-count');
     // text = 'You Have played ' + playCount + ' ';
     // if (playCount === 1) text += 'time';
     // else text += 'times';
@@ -135,7 +141,6 @@ function updatePlayCount(playCount) {
 }
 
 function updateHighScore(highScore) {
-    $highScoreBoard = $('#high-score');
     // text = 'Your High Score is ' + highScore + ' ';
     // if (highScore === 1) text += 'Point';
     // else text += 'Points';
@@ -144,7 +149,6 @@ function updateHighScore(highScore) {
 }
 
 function alertUser(text) {
-    $infoBar = $('#user-info');
     $infoBar.text(text);
     $infoBar.show();
     setTimeout(() => { $infoBar.hide() }, 1500)

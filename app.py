@@ -22,7 +22,15 @@ def display_boggle_game():
 
 @app.route("/guess", methods=["POST"])
 def guess_word():
-    # """  """
+    """operates on a string retrieved from request.json['guess']
+    checks if that word is a valid word in the current game and
+    returns the result of that check.
+    possible results are:
+    "ok"
+    "not-on-board"
+    "not-a-word"
+    "used-word"
+    """
     guess = request.json.get("guess")
     guess = guess.strip()
     used_words = session["used_words"]
@@ -33,13 +41,6 @@ def guess_word():
     return jsonify({"result": result})
 
 
-@app.route("/reshuffle")
-def reset_board():
-    """ """
-    board = make_board()
-    return render("boggle-board.html", board=board)
-
-
 @app.route("/game-over", methods=["POST"])
 def game_over():
     session.pop("board", None)
@@ -47,6 +48,13 @@ def game_over():
     score = int(request.json.get("score"))
     high_score = update_high_score(score)
     return jsonify({"high_score": high_score, "num_of_plays": session["play_count"]})
+
+
+@app.route("/reshuffle")
+def reset_board():
+    """ """
+    board = make_board()
+    return render("boggle-board.html", board=board)
 
 
 def update_high_score(score):
