@@ -1,5 +1,5 @@
 from unittest import TestCase
-from app import app, increment_play_count
+from app import app
 from flask import session
 from boggle import Boggle
 
@@ -97,21 +97,24 @@ class GameOverPageTests(TestCase):
             self.assertEqual(session.get("high_score"), 4)
             self.assertIs(session.get('board'), None)
 
-class ReshuffleTests(TestCase):
+class ReshufflePageTests(TestCase):
     def test_reshuffle_works_without_root_load(self):
         with app.test_client() as client:
             res = client.get('/reshuffle')
             self.assertEqual(res.status_code, 200)
             html = res.get_data(as_text=True)
             test_string = '<table class="boggle-board">'
+            b = session['board']
+            test_array = [f"<td>{b[0][0]}</td>", f"<td>{b[0][1]}</td>",f"<td>{b[0][3]}</td>"]
             #should load the filled in boggle table
-            self.assertIn(test_string, html.strip())
+            self.assertIn(test_string, html)
+            for test in test_array:
+                self.assertIn(test, html)
             #should not load the whole boggle page
-            self.assertNotIn('<h1 class="title">BOGGLE!</h1>')
+            self.assertNotIn('<h1 class="title">BOGGLE!</h1>',html)
             
     def test_reshuffle_sends_unique_tables(self):
-        
-            with app.test_client() as client:
+        with app.test_client() as client:
             res = client.get('/reshuffle')
             first_table = res.get_data(as_text=True)
             
@@ -119,54 +122,3 @@ class ReshuffleTests(TestCase):
             self.assertEqual(res.status_code, 200)
             second_table = res.get_data(as_text=True)
             self.assertNotEqual(first_table,second_table)
-            
-
-class PlayCountTests(TestCase):
-    def test_play_count_on_page_load(self):
-        with app.test_client() as client:
-            res = client.get('/')
-            html = res.get_data(as_text=True)
-            
-            #if no 'play_count' in session, should be zero
-            self.assertIn('<span id="play-count">0</span>', html)
-            
-            
-            with client.session_transaction() as change_session:
-                change_session['play_count'] = 99
-            res = client.get('/')
-            html = res.get_data(as_text=True)
-            
-            #if 'play_count' in session, should be play_count
-            self.assertIn('<span id="play-count">99</span>', html)
-        
-    def test_increment_play_count(self):
-        with app.test_client() as client:
-            client.get('/')
-            self.assertEqual(session.get('play_count'), None)
-            increment_play_count()
-            self.assertEqual(session.get('play_count'), 1)
-            increment_play_count()
-            increment_play_count()
-            self.assertEqual(session.get('play_count'), 3)
-
-class HighScoreTests(TestCase):
-    def test_high_score(self):
-        with app.test_client() as client:
-            
-            #when no previous high score, and 0 is inputed, 0 is the highest score
-            client.get('/')            
-            res = client.post('/game-over', json={'score':0})
-            self.assertEqual(res.json["high_score"], 0)
-            
-            client.get('/')
-            res = client.post('/game-over', json={'score':4})
-            self.assertEqual(res.json["high_score"], 4)
-            #if previous high score is higher, the old high score is returned
-            client.get('/')
-            res = client.post('/game-over', json={'score':3})
-            self.assertEqual(res.json["high_score"], 4)
-            
-            client.get('/')
-            res = client.post('/game-over', json={'score':10})
-            self.assertEqual(res.json["high_score"], 10)
-
